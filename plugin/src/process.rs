@@ -26,6 +26,7 @@ pub struct Process<'a> {
     /// If this is set to [`None`], then this means the plugin is running is a free-running host,
     /// and no transport events will be provided.
     pub transport: Option<&'a TransportEvent>,
+
     /// A steady sample time counter.
     ///
     /// This field can be used to calculate the sleep duration between two process calls.
@@ -37,6 +38,9 @@ pub struct Process<'a> {
     /// Note that this counter's maximum value is actually [`i64::MAX`], due to how it is
     /// implemented in the CLAP specification.
     pub steady_time: Option<u64>,
+
+    /// The number of frames to process.
+    pub frames_count: u32,
 }
 
 impl<'a> Process<'a> {
@@ -49,6 +53,7 @@ impl<'a> Process<'a> {
         let steady_time = (*raw).steady_time;
 
         Self {
+            frames_count: (*raw).frames_count,
             steady_time: if steady_time < 0 {
                 None
             } else {
